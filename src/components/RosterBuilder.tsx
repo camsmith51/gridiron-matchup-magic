@@ -1,11 +1,9 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { PlayerSearchModal } from "./PlayerSearchModal";
-import { ArrowLeft, Search, Users } from "lucide-react";
+import { ArrowLeft, Users } from "lucide-react";
 
 interface RosterBuilderProps {
   onPlayerSelect: (player: any) => void;
@@ -56,7 +54,7 @@ export const RosterBuilder = ({ onPlayerSelect, onBack }: RosterBuilderProps) =>
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-emerald-900">
+    <div className="min-h-screen bg-gradient-to-br from-black via-purple-900 to-purple-800">
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center gap-4 mb-8">
           <Button
@@ -73,7 +71,7 @@ export const RosterBuilder = ({ onPlayerSelect, onBack }: RosterBuilderProps) =>
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Starters */}
           <div className="lg:col-span-2">
-            <Card className="bg-white/10 backdrop-blur-sm border-green-700">
+            <Card className="bg-white/10 backdrop-blur-sm border-purple-700">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Users className="h-5 w-5" />
@@ -84,20 +82,20 @@ export const RosterBuilder = ({ onPlayerSelect, onBack }: RosterBuilderProps) =>
                 {roster.filter(spot => spot.required).map((spot, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-green-600 hover:bg-white/10 transition-colors cursor-pointer"
+                    className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-purple-600 hover:bg-white/10 transition-colors cursor-pointer"
                     onClick={() => handlePositionClick(spot.position)}
                   >
                     <div className="flex items-center gap-3">
-                      <Badge variant="outline" className="text-yellow-400 border-yellow-400">
+                      <Badge variant="outline" className="text-purple-400 border-purple-400">
                         {spot.position}
                       </Badge>
                       {spot.player ? (
                         <div className="text-white">
                           <span className="font-semibold">{spot.player.name}</span>
-                          <span className="text-green-200 ml-2">({spot.player.team})</span>
+                          <span className="text-purple-200 ml-2">({spot.player.team})</span>
                         </div>
                       ) : (
-                        <span className="text-green-200">Click to add player</span>
+                        <span className="text-purple-200">Click to add player</span>
                       )}
                     </div>
                     {spot.player && (
@@ -107,7 +105,7 @@ export const RosterBuilder = ({ onPlayerSelect, onBack }: RosterBuilderProps) =>
                           e.stopPropagation();
                           handleFindSimilar(spot.player);
                         }}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-green-900"
+                        className="bg-purple-500 hover:bg-purple-600 text-white"
                       >
                         Find Similar
                       </Button>
@@ -120,7 +118,7 @@ export const RosterBuilder = ({ onPlayerSelect, onBack }: RosterBuilderProps) =>
 
           {/* Bench */}
           <div>
-            <Card className="bg-white/10 backdrop-blur-sm border-green-700">
+            <Card className="bg-white/10 backdrop-blur-sm border-purple-700">
               <CardHeader>
                 <CardTitle className="text-white">Bench</CardTitle>
               </CardHeader>
@@ -128,11 +126,11 @@ export const RosterBuilder = ({ onPlayerSelect, onBack }: RosterBuilderProps) =>
                 {roster.filter(spot => !spot.required).map((spot, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-green-600 hover:bg-white/10 transition-colors cursor-pointer"
+                    className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-purple-600 hover:bg-white/10 transition-colors cursor-pointer"
                     onClick={() => handlePositionClick(spot.position)}
                   >
                     <div className="flex items-center gap-3">
-                      <Badge variant="outline" className="text-green-300 border-green-300 text-xs">
+                      <Badge variant="outline" className="text-purple-300 border-purple-300 text-xs">
                         {spot.position}
                       </Badge>
                       {spot.player ? (
@@ -140,7 +138,7 @@ export const RosterBuilder = ({ onPlayerSelect, onBack }: RosterBuilderProps) =>
                           <span className="font-semibold">{spot.player.name}</span>
                         </div>
                       ) : (
-                        <span className="text-green-200 text-sm">Empty</span>
+                        <span className="text-purple-200 text-sm">Empty</span>
                       )}
                     </div>
                     {spot.player && (
@@ -151,7 +149,7 @@ export const RosterBuilder = ({ onPlayerSelect, onBack }: RosterBuilderProps) =>
                           e.stopPropagation();
                           handleFindSimilar(spot.player);
                         }}
-                        className="text-yellow-400 hover:bg-white/10 text-xs"
+                        className="text-purple-400 hover:bg-white/10 text-xs"
                       >
                         Find
                       </Button>
