@@ -4,16 +4,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RosterBuilder } from "@/components/RosterBuilder";
 import { PlayerComparison } from "@/components/PlayerComparison";
-import { Trophy, Users, TrendingUp } from "lucide-react";
+import { Trophy, Users, TrendingUp, Download } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<'home' | 'roster' | 'comparison'>('home');
   const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
   const [matchedPlayer, setMatchedPlayer] = useState<any>(null);
+  const [importing, setImporting] = useState(false);
 
   const handlePlayerSelect = (player: any) => {
     setSelectedPlayer(player);
-    // Mock matched player for demo with advanced stats
+    // Find a similar player from database or use mock for now
     setMatchedPlayer({
       name: "2025 Jalen Coker",
       team: "CAR",
@@ -22,7 +25,6 @@ const Index = () => {
       targets: 89,
       receptions: 58,
       yards: 742,
-      // Advanced stats
       fortyYardDash: 4.42,
       height: "6'1\"",
       weight: 205,
@@ -32,6 +34,30 @@ const Index = () => {
       breakoutAge: 20.1
     });
     setCurrentView('comparison');
+  };
+
+  const handleImportData = async () => {
+    setImporting(true);
+    toast.info("Starting data import... This may take a few minutes.");
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('fetch-fantasy-data');
+      
+      if (error) {
+        throw error;
+      }
+      
+      if (data.success) {
+        toast.success(`Import complete! Added ${data.playersAdded} players and ${data.statsAdded} stat records.`);
+      } else {
+        throw new Error(data.error || 'Import failed');
+      }
+    } catch (error) {
+      console.error('Import error:', error);
+      toast.error(`Import failed: ${error.message}`);
+    } finally {
+      setImporting(false);
+    }
   };
 
   if (currentView === 'roster') {
@@ -65,13 +91,26 @@ const Index = () => {
             Build your roster and discover hidden gems using advanced statistical analysis.
           </p>
           
-          <Button 
-            onClick={() => setCurrentView('roster')}
-            size="lg"
-            className="bg-purple-500 hover:bg-purple-600 text-white font-bold px-8 py-4 text-lg"
-          >
-            Start Building Your Roster
-          </Button>
+          <div className="flex gap-4 justify-center mb-8">
+            <Button 
+              onClick={() => setCurrentView('roster')}
+              size="lg"
+              className="bg-purple-500 hover:bg-purple-600 text-white font-bold px-8 py-4 text-lg"
+            >
+              Start Building Your Roster
+            </Button>
+            
+            <Button
+              onClick={handleImportData}
+              disabled={importing}
+              variant="outline"
+              size="lg"
+              className="border-purple-600 text-purple-200 hover:bg-white/10 font-bold px-8 py-4 text-lg"
+            >
+              <Download className="h-5 w-5 mr-2" />
+              {importing ? "Importing..." : "Import Real Data"}
+            </Button>
+          </div>
         </div>
 
         {/* Feature Cards */}
