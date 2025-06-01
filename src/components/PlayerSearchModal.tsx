@@ -29,10 +29,10 @@ export const PlayerSearchModal = ({ isOpen, onClose, onPlayerSelect, position }:
     setLoading(true);
     try {
       let query = supabase
-        .from('players')
+        .from('sleeper_players')
         .select(`
           *,
-          player_stats!inner(
+          sleeper_player_stats!inner(
             season,
             fantasy_points,
             targets,
@@ -42,7 +42,7 @@ export const PlayerSearchModal = ({ isOpen, onClose, onPlayerSelect, position }:
             passing_yards
           )
         `)
-        .order('player_stats.fantasy_points', { ascending: false })
+        .order('sleeper_player_stats.fantasy_points', { ascending: false })
         .limit(50);
 
       // Filter by position if specified
@@ -68,7 +68,7 @@ export const PlayerSearchModal = ({ isOpen, onClose, onPlayerSelect, position }:
 
       // Transform data to include aggregated stats
       const playersWithStats = data?.map(player => {
-        const stats = player.player_stats || [];
+        const stats = player.sleeper_player_stats || [];
         const latestStats = stats[0] || {};
         
         return {

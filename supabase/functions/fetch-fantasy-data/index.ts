@@ -51,7 +51,7 @@ serve(async (req) => {
 
         // Insert or update player
         const { data: existingPlayer } = await supabase
-          .from('players')
+          .from('sleeper_players')
           .select('id')
           .eq('sleeper_id', playerId)
           .single();
@@ -59,7 +59,7 @@ serve(async (req) => {
         let dbPlayerId;
         if (!existingPlayer) {
           const { data: newPlayer, error: playerError } = await supabase
-            .from('players')
+            .from('sleeper_players')
             .insert({
               name: player.full_name || `${player.first_name} ${player.last_name}`,
               position: player.position,
@@ -106,7 +106,7 @@ serve(async (req) => {
 
         // Insert player stats
         const { error: statsError } = await supabase
-          .from('player_stats')
+          .from('sleeper_player_stats')
           .insert({
             player_id: dbPlayerId,
             season: parseInt(year),
@@ -131,7 +131,7 @@ serve(async (req) => {
         // Insert advanced stats if available
         if (player.position === 'WR' || player.position === 'TE') {
           const { error: advancedError } = await supabase
-            .from('advanced_stats')
+            .from('sleeper_advanced_stats')
             .insert({
               player_id: dbPlayerId,
               season: parseInt(year),
